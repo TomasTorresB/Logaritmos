@@ -267,6 +267,7 @@ class BTree:
         file.seek(0, 2)# puntero al final del archivo, se usa para leer
         file_size = remaining_size = file.tell()
         offset = 0
+
         # Mover los nodos superiores de posicion y actualizar sus punteros
         while remaining_size > pos_antigua: # se mueve el remaining size
             #print("Remaining size: " + str(remaining_size))
@@ -280,39 +281,33 @@ class BTree:
             lines = buffer.split('\n')
             #print(lines) # para saber lo que se leyo
             if len(lines) == 2 and B != remaining_size - pos_antigua: # No se recibió el nodo completo
-                print("NO LLEGAR ACA, FALTA ARREGLAR UN PAR DE COSAS")
-                print("ERROR: tamaño del nodo > B")
                 # falta actualizar el ramaining size para este caso
                 node_text = lines[0]
                 #print("Se recibio: " + node_text)
                 # Se van agregando los pedazos que se leen a la lista, la inserción es de derecha a izq
                 node_list = [node_text]
                 # Se para de agregar cuando se encuentra el salto de linea o se llega al inicio
+                offset2 = offset + B
                 while '\n' not in node_text:
-                    offset += self.__B
-                    file.seek(file_size - offset)
+                    offset2 += self.__B
+                    file.seek(file_size - offset2)
                     node_text = file.read(self.__B)
                     node_list.append(node_text)
-                # Actualizar el offset, NO INCLUIR CANT BYTES
-                offset = offset + len(node_list[len(node_list) - 1].split('\n')[0])
-                # se deja el fp despues del salto de linea + la cantidad de bytes a mover
-                file.seek(file_size - offset + cant_bytes)
+                # Eliminar la info del nodo "anterior"(el que sigue en la busqueda de end to init)
                 node_list[len(node_list) - 1] = node_list[len(node_list) - 1].split('\n')[1]
                 node_text = ""
                 for i, string in reversed(list(enumerate(node_list))):
-                    #if i != 0:
                     node_text += string
                 #print("El nodo completo corresponde a : " + node_text)
             else:
                 #print('Multiples nodos leidos: ' + str(lines))
-
                 node_text = lines[len(lines) - 2]
-                spaces = len(node_text) + 1 # nodo + \n
-                offset += spaces
-                remaining_size = file_size - offset
-                aux = file_size - offset + cant_bytes # Se deja el fp apuntando al ultimo nodo + cant bytes a mover
-                #print("Rem size act: " + str(remaining_size))
-                file.seek(aux)
+
+            offset += len(node_text) + 1
+            remaining_size = file_size - offset
+            aux = file_size - offset + cant_bytes # Se deja el fp apuntando al ultimo nodo + cant bytes a mover
+            #print("Rem size act: " + str(remaining_size))
+            file.seek(aux)
             #print("NODO A ESCRIBIR: " + node_text)
             node = Node.from_text(node_text)
             values = node.get_values()
@@ -414,7 +409,7 @@ class BTree:
         file.seek(end_ptr)
 
 
-T = BTree('test9.txt',3,128) # k , B
+T = BTree('test9.txt',3,16) # k , B
 T.insert(2)
 T.insert(5)
 T.insert(4)
@@ -433,7 +428,8 @@ T.insert(17)
 T.insert(16)
 T.insert(14)
 T.insert(15)
-
+assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6) and T.search(7) and T.search(8) and T.search(9) and T.search(10)
+assert T.search(11) and T.search(12) and T.search(13) and T.search(14) and T.search(15) and T.search(16) and T.search(17) and not T.search(18) and not T.search(19) and not T.search(20)# Hasta aqui va bien
 
 # Para debuggear
 #file.seek(0)
