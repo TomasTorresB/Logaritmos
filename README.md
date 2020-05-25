@@ -1,5 +1,9 @@
 # T2
 
+## Bug
+
+Actualmente no se puede tener un B < cant de bytes de un nodo
+
 ## Notación
 
 Este codigo permite crear, insertar y buscar en Arboles B.
