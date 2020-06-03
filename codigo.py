@@ -409,27 +409,27 @@ class BTree:
         file.seek(end_ptr)
 
 
-T = BTree('test9.txt',3,16) # k , B
+T = BTree('ortuzar.txt',3,16) # k , B
 T.insert(2)
 T.insert(5)
 T.insert(4)
-assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and not T.search(6) # Hasta aqui va bien
-T.insert(6)
-assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6)# Hasta aqui va bien
-T.insert(8)
-T.insert(7)
-T.insert(9)
-assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6) and T.search(7) and T.search(8) and T.search(9) and not T.search(10)# Hasta aqui va bien
-T.insert(10)
-T.insert(11)
-T.insert(12)
-T.insert(13)
-T.insert(17)
-T.insert(16)
-T.insert(14)
-T.insert(15)
-assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6) and T.search(7) and T.search(8) and T.search(9) and T.search(10)
-assert T.search(11) and T.search(12) and T.search(13) and T.search(14) and T.search(15) and T.search(16) and T.search(17) and not T.search(18) and not T.search(19) and not T.search(20)# Hasta aqui va bien
+#assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and not T.search(6) # Hasta aqui va bien
+#T.insert(6)
+#assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6)# Hasta aqui va bien
+#T.insert(8)
+#T.insert(7)
+#T.insert(9)
+#assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6) and T.search(7) and T.search(8) and T.search(9) and not T.search(10)# Hasta aqui va bien
+#T.insert(10)
+#T.insert(11)
+#T.insert(12)
+#T.insert(13)
+#T.insert(17)
+#T.insert(16)
+#T.insert(14)
+#T.insert(15)
+#assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6) and T.search(7) and T.search(8) and T.search(9) and T.search(10)
+#assert T.search(11) and T.search(12) and T.search(13) and T.search(14) and T.search(15) and T.search(16) and T.search(17) and not T.search(18) and not T.search(19) and not T.search(20)# Hasta aqui va bien
 
 # Para debuggear
 #file.seek(0)
