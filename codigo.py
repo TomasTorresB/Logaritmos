@@ -31,13 +31,13 @@ class Node:
 
     def to_text(self):
         string = f"{self.__ptrs[0]}."
-        for j in range(7 - len(str(self.__ptrs[0]))):
+        for j in range(11 - len(str(self.__ptrs[0]))):
             string += "0"
         for i in range(len(self.__values)):
             string += f",{self.__values[i]}"
             string += f",{self.__ptrs[i+1]}."
             largo = len(str(self.__ptrs[i+1]))
-            for j in range(7 - largo):
+            for j in range(11 - largo):
                 string += "0"
         return f"{string}\n"
 
@@ -63,9 +63,9 @@ class BTree:
             f.seek(file_size - offset)
             buffer = f.read(offset)
             lines = buffer.split('\n')
-            # print(lines) # para saber lo que se leyo
+            #print(lines) # para saber lo que se leyo
             # No cabe el nodo completo en B
-            if len(lines) == 2:
+            if len(lines) == 2 and offset < file_size:
                 node_text = lines[0]
                 # Se van agregando los pedazos que se leen a la lista, la inserción es de derecha a izq
                 node_list = [node_text]
@@ -408,11 +408,25 @@ class BTree:
         file.truncate(end - cant_bytes)
         file.seek(end_ptr)
 
+from random import randint
+def make_BTree(lines, B, name_of_file_p2b, k):
+    T = BTree(name_of_file_p2b, k, B)
+    next_val = 1
+    for i in range(lines - 1):
+        if i%1000 == 0: print(i)
+        next_val = next_val + randint(1, 10)
+        T.insert(next_val)
 
-T = BTree('ortuzar.txt',3,16) # k , B
-T.insert(2)
-T.insert(5)
-T.insert(4)
+
+#make_BTree(100000,2048,"ortuzarpls2.txt",200)
+
+#T = BTree('hmmm2.txt',100,2048) # k , B
+
+#for i in range(100000):
+#    T.insert(i)
+#T.insert(2)
+#T.insert(5)
+#T.insert(4)
 #assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and not T.search(6) # Hasta aqui va bien
 #T.insert(6)
 #assert T.search(2) and not T.search(3) and T.search(4) and T.search(5) and T.search(6)# Hasta aqui va bien
