@@ -129,6 +129,7 @@ class BTree:
                 # Primero se recorre el arbol buscando el lugar donde insertar el objeto
                 ptr = self.__root_ptr # se parte desde el root
                 while not found:
+                    #print(ptr)
                     prev_ptrs.append(ptr) # indicar que se lee un nodo
                     f.seek(ptr) # dejar el fp antes del nodo
                     node_text = f.read(self.__B) # leer el nodo
@@ -149,12 +150,12 @@ class BTree:
                                 ptrs.append(-1) # como es uno nodo hoja todos los punteros son placeholders y da lo mismo dd se inserta
 
                                 # Escribir el nodo actualizado y mover las pos necesarias
-                                self.insert_correct_pos(f, values, ptrs , ptr, ptr + len(node_text.split('\n')[0]) + 1, 10+len(str(element))) # len(ptr) + 2 comas + len(elem)
+                                self.insert_correct_pos(f, values, ptrs , ptr, ptr + len(node_text.split('\n')[0]) + 1, 12 + 2 +len(str(element))) # len(ptr) + 2 comas + len(elem)
 
                                 # Actualizar la pos de los punteros guardados
                                 for q in range(len(prev_ptrs)):
                                     if prev_ptrs[q] >= ptr + len(node_text.split('\n')[0]) + 1:
-                                        prev_ptrs[q] += 10+len(str(element))
+                                        prev_ptrs[q] += 12 + 2 +len(str(element))
 
                                 j = 0  # variable para indicar que tan abajo uno se encuentra en el arbol,
                                 # si j = 0 se esta ubicado en las hojas, sirve para saber los nodos padres
@@ -194,6 +195,7 @@ class BTree:
                                         new_root_value = [med_value]
                                         new_root_ptrs = [ptr1, ptr2]
                                         root = Node.to_text(Node(new_root_value,new_root_ptrs))
+
                                         self.__root_ptr = f.tell()
                                         f.write(root)
                                         break # no seguir chequeando mas arriba del root
@@ -220,14 +222,14 @@ class BTree:
                                         pos_antigua = ptr + len(node_text.split('\n')[0]) + 1
 
                                         # Escribir el padre actualizado y mover los nodos correspondientes
-                                        self.insert_correct_pos(f, values, ptrs, ptr, pos_antigua, 10 + len(str(med_value)))  # len(ptr) + 2 comas + len(med_value)
+                                        self.insert_correct_pos(f, values, ptrs, ptr, pos_antigua, 12 + 2 + len(str(med_value)))  # len(ptr) + 2 comas + len(med_value)
                                         end_ptr = f.tell() # para el siguiente ciclo while
                                         # el ptr es el mismo, y values/ptrs quedan actualizados para la proxima iter del while
 
                                         # Actualizar la pos de los punteros guardados
                                         for q in range(len(prev_ptrs)):
                                             if prev_ptrs[q] >= pos_antigua:
-                                                prev_ptrs[q] += 10 + len(str(med_value))
+                                                prev_ptrs[q] += 12 + 2 + len(str(med_value))
 
                                         # Ahora añadir el nuevo nodo casi al final y mover el root
                                         # Guardar el root
@@ -418,12 +420,14 @@ def make_BTree(lines, B, name_of_file_p2b, k):
         T.insert(next_val)
 
 
-#make_BTree(100000,2048,"ortuzarpls2.txt",200)
+#make_BTree(100000,2048,"ortuzarpls3.txt",200)
 
-#T = BTree('hmmm2.txt',100,2048) # k , B
+T = BTree('aaaa.txt',100,2048) # k , B
 
-#for i in range(100000):
-#    T.insert(i)
+for i in range(10000):
+    if i % 1000 == 0:
+        print(i)
+    T.insert(i)
 #T.insert(2)
 #T.insert(5)
 #T.insert(4)
